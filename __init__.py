@@ -1,9 +1,13 @@
+from faker import Faker
+
+fake = Faker("es_ES")
+
 import random
 import datetime
 import json
 
 
-def generar_coordenadas():
+def generate_location():
     punto1 = (-58.181454, -26.197792)
     punto2 = (-58.213416, -26.188326)
     punto3 = (-58.164028, -26.182170)
@@ -27,37 +31,46 @@ def generate_datetime_between_two_dates(start_date, end_date):
     return (start_date + datetime.timedelta(seconds=random_second)).isoformat()
 
 
-def generar_incidencia(i):
-    coso = {
+def generate_incident(i):
+    return {
         "subject": f"Title {i}",
         "description": f"Description {i}",
-        "geolocation": generar_coordenadas(),
+        "geolocation": generate_location(),
         "happened_at": generate_datetime_between_two_dates(
             datetime.datetime(2024, 1, 1), datetime.datetime.now()
         ),
     }
-    return coso
 
 
-incidencias = []
+def generate_post():
+    return {
+        "title": fake.sentence(),
+        "description": fake.text(),
+        "allow_comments": random.choice([True, False]),
+        "created_at": generate_datetime_between_two_dates(
+            datetime.datetime(2024, 1, 1), datetime.datetime.now()
+        ),
+    }
+
+
+incidents = []
+posts = []
 
 for i in range(500):
-    incidencias.append(generar_incidencia(i))
+    incidents.append(generate_incident(i))
 
-incidencias.sort(key=lambda x: x.get("happened_at"))
+for i in range(200):
+    posts.append(generate_post())
+
+
+incidents.sort(key=lambda x: x.get("happened_at"))
 
 json.dump(
-    incidencias,
+    incidents,
     open("incidents.json", "w"),
 )
 
-
-def generate_test_data(incident):
-
-    location = list(map(str, incident.get("geolocation")))
-
-    return ",".join([location[1], location[0]])+ "," + "red,marker" + "," +incident.get("description") 
-    
-
-for incident in incidencias:
-    print(generate_test_data(incident))
+json.dump(
+    posts,
+    open("posts.json", "w"),
+)
