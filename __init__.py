@@ -44,6 +44,8 @@ incidencias = []
 for i in range(500):
     incidencias.append(generar_incidencia(i))
 
+incidencias.sort(key=lambda x: x.get("happened_at"))
+
 json.dump(
     incidencias,
     open("incidents.json", "w"),
