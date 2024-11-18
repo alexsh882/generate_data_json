@@ -52,9 +52,18 @@ def generate_post():
         ),
     }
 
+def generate_users():
+    return {
+        "surnames": fake.last_name(),
+        "names" : fake.first_name(),
+        "email" : fake.email(),
+        "username" : fake.user_name(),
+        "dni" : fake.random_number(8, True),
+    }
 
 incidents = []
 posts = []
+users = []
 
 for i in range(500):
     incidents.append(generate_incident(i))
@@ -62,6 +71,8 @@ for i in range(500):
 for i in range(200):
     posts.append(generate_post())
 
+for i in range(200):
+    users.append(generate_users())
 
 incidents.sort(key=lambda x: x.get("happened_at"))
 
@@ -73,4 +84,9 @@ json.dump(
 json.dump(
     posts,
     open("posts.json", "w"),
+)
+
+json.dump(
+    users,
+    open("users.json", "w"),
 )
