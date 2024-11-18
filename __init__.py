@@ -61,9 +61,15 @@ def generate_users():
         "dni" : fake.random_number(8, True),
     }
 
+def generate_comments():
+    return {
+        "content": fake.paragraph(),       
+    }
+
 incidents = []
 posts = []
 users = []
+comments = []
 
 for i in range(500):
     incidents.append(generate_incident(i))
@@ -73,6 +79,9 @@ for i in range(200):
 
 for i in range(200):
     users.append(generate_users())
+
+for i in range(1000):
+    comments.append(generate_comments())
 
 incidents.sort(key=lambda x: x.get("happened_at"))
 
@@ -89,4 +98,9 @@ json.dump(
 json.dump(
     users,
     open("users.json", "w"),
+)
+
+json.dump(
+    comments,
+    open("comments.json", "w"),
 )
